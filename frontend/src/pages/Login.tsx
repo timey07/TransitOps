@@ -76,13 +76,10 @@ export default function Login() {
             Automated Fleet <br />
             <span className="text-indigo-400">Orchestration System</span>
           </h1>
-          <p className="text-xs font-semibold text-slate-500 mt-3 max-w-xs uppercase tracking-widest">
-            Control Node v4.12 // SECURE DATA ONLY
-          </p>
         </div>
 
         {/* High-Fidelity App Wireframe Vector Mockup */}
-        <div className="relative z-10 my-auto max-w-sm w-full space-y-6">
+        <div className="relative z-10 my-auto max-w-sm w-full space-y-12">
           <div className="p-5 bg-[#030712]/90 border border-slate-800/80 rounded-2xl relative shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-sm group hover:border-indigo-500/30 transition-colors duration-300">
             <div className="absolute top-3 right-3 flex gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-slate-800" />
