@@ -15,30 +15,40 @@ export default function Navbar({ onMenuToggle }: NavbarProps) {
   };
 
   return (
-    <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shrink-0">
-      <div className="flex items-center gap-4">
+    <header className="h-20 bg-white dark:bg-[#090d16] border-b border-slate-200/80 dark:border-slate-800/60 flex items-center justify-between px-8 shrink-0 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+      
+      {/* Left Aligned Sector */}
+      <div className="flex items-center gap-6">
         <button
           onClick={onMenuToggle}
-          className="lg:hidden p-1.5 text-slate-500 hover:bg-slate-100 rounded-lg transition-colors"
+          className="lg:hidden p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-[#030712] rounded-xl border border-transparent hover:border-slate-200/60 dark:hover:border-slate-800/60 transition-colors"
           aria-label="Open menu"
         >
           <Menu size={20} />
         </button>
-        <span className="text-sm font-medium text-slate-500">Transit Operations Hub</span>
+        <span className="text-sm font-bold tracking-tight text-slate-800 dark:text-slate-200">
+          Transit Operations Hub
+        </span>
       </div>
 
-      <div className="flex items-center gap-3">
-        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 border border-slate-200 text-slate-600">
+      {/* Right Aligned Sector */}
+      <div className="flex items-center gap-5">
+        <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-slate-50 dark:bg-[#030712] border border-slate-200/80 dark:border-slate-800/60 text-slate-600 dark:text-slate-400 shadow-sm">
           <User size={16} />
         </div>
+        
+        {/* Alignment Divider */}
+        <div className="h-5 w-px-slate-200 dark:bg-slate-800/80" />
+        
         <button 
           onClick={handleLogout}
-          className="flex items-center justify-center p-2 rounded-lg text-slate-500 hover:bg-red-50 hover:text-red-600 transition-colors"
+          className="flex items-center justify-center p-2 rounded-xl text-slate-400 dark:text-slate-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 hover:text-rose-600 dark:hover:text-rose-400 border border-transparent hover:border-rose-100 dark:hover:border-rose-900/30 transition-all"
           title="Logout"
         >
           <LogOut size={18} />
         </button>
       </div>
+
     </header>
   )
 }

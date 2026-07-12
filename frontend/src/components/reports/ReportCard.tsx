@@ -18,31 +18,26 @@ export default function ReportCard({
   iconBg,
 }: Props) {
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-5">
-      <div className="flex items-center justify-between">
-
-        <div>
-          <p className="text-sm text-slate-500">
+    <div className="bg-white dark:bg-[#090d16] border border-slate-200/80 dark:border-slate-800/60 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)] dark:shadow-[0_4px_30px_-4px_rgba(0,0,0,0.2)] transition-all duration-200 hover:scale-[1.01]">
+      <div className="flex items-start justify-between">
+        <div className="space-y-1">
+          <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
             {title}
           </p>
-
-          <h3 className="text-2xl font-bold text-slate-900 mt-1">
+          <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
             {value}
           </h3>
-
-          <p className="text-xs text-slate-500 mt-2">
+          <p className="text-xs font-medium text-slate-400 dark:text-slate-500 pt-1.5">
             {description}
           </p>
         </div>
 
-
-        <div className={`p-3 rounded-lg ${iconBg}`}>
+        <div className={`p-2.5 rounded-xl border ${iconBg}`}>
           <Icon 
-            size={22}
+            size={20}
             className={iconColor}
           />
         </div>
-
       </div>
     </div>
   );

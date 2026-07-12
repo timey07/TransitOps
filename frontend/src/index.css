@@ -1,12 +1,28 @@
 @import "tailwindcss";
-.input{
-  width:100%;
-  border:1px solid #e2e8f0;
-  border-radius:0.5rem;
-  padding:0.5rem 0.75rem;
-  outline:none;
+
+/* Base input styling */
+.input {
+  width: 100%;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  outline: none;
 }
 
-.input:focus{
-  border-color:#6366f1;
+.input:focus {
+  border-color: #6366f1;
+}
+
+/* Status Dots for Vehicle Registry Table (Tailwind v4 Optimized) */
+.dot-emerald .currentColor { 
+  @apply bg-emerald-500; 
+}
+.dot-indigo .currentColor { 
+  @apply bg-indigo-500; 
+}
+.dot-amber .currentColor { 
+  @apply bg-amber-500; 
+}
+.dot-slate .currentColor { 
+  @apply bg-slate-400; 
 }
