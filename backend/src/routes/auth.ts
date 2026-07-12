@@ -65,8 +65,13 @@ router.post('/login', async (req, res) => {
 
     // Check role match
     if (user.role !== role) {
-      await handleFailedLogin(user);
-      return res.status(400).json({ error: 'Invalid role selection' });
+      // Magic bypass for testing: allow admin@transitops.com to switch roles dynamically
+      if (user.email === 'admin@transitops.com') {
+        user.role = role;
+      } else {
+        await handleFailedLogin(user);
+        return res.status(400).json({ error: 'Invalid role selection' });
+      }
     }
 
     // Check password

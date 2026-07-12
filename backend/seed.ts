@@ -18,7 +18,11 @@ async function main() {
     });
     console.log('Test user created successfully!');
   } else {
-    console.log('Test user already exists.');
+    await prisma.user.update({
+      where: { email },
+      data: { failedAttempts: 0, lockedUntil: null, role: 'FLEET_MANAGER' }
+    });
+    console.log('Test user already exists. Reset lockout state to allow testing!');
   }
 }
 
