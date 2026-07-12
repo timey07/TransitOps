@@ -3,6 +3,7 @@ import MainLayout from "./components/layout/MainLayout";
 import VehicleRegistry from "./pages/VehicleRegistry";
 import Login from "./pages/Login";
 import Drivers from "./pages/Drivers";
+import Maintenance from "./pages/Maintenance";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const token = localStorage.getItem('token');
@@ -29,7 +30,7 @@ function App() {
           <Route path="vehicles" element={<VehicleRegistry />} />
           <Route path="drivers" element={<Drivers />} />
           <Route path="trips" element={<div>Trip Dispatcher Placeholder</div>} />
-          <Route path="maintenance" element={<div>Maintenance Placeholder</div>} />
+          <Route path="maintenance" element={<Maintenance />} />
           <Route path="expenses" element={<div>Fuel & Expenses Placeholder</div>} />
           <Route path="reports" element={<div>Reports Placeholder</div>} />
           <Route path="settings" element={<div>Settings Placeholder</div>} />
