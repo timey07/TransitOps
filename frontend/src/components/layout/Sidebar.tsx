@@ -1,57 +1,50 @@
-import { Link } from "react-router-dom";
-import { 
-  LayoutDashboard, 
-  Truck, 
-  Users, 
-  MapPin, 
-  Wrench, 
-  CreditCard, 
-  BarChart3,
-  Settings
-} from "lucide-react";
+import { Link, useLocation } from 'react-router-dom'
+import { LayoutDashboard, Route, Receipt, BarChart3 } from 'lucide-react'
 
-const navigation = [
-  { name: 'Dashboard', href: '/', icon: LayoutDashboard },
-  { name: 'Vehicle Registry', href: '/vehicles', icon: Truck },
-  { name: 'Driver Profiles', href: '/drivers', icon: Users },
-  { name: 'Trip Dispatcher', href: '/trips', icon: MapPin },
-  { name: 'Maintenance', href: '/maintenance', icon: Wrench },
-  { name: 'Fuel & Expenses', href: '/expenses', icon: CreditCard },
-  { name: 'Reports', href: '/reports', icon: BarChart3 },
-];
+const NAV_ITEMS = [
+  { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+  { label: 'Trips', path: '/trips', icon: Route },
+  { label: 'Expenses', path: '/expenses', icon: Receipt },
+  { label: 'Reports', path: '/reports', icon: BarChart3 },
+]
 
 export default function Sidebar() {
+  const location = useLocation()
+
   return (
-    <div className="flex h-full w-64 flex-col border-r border-gray-200 bg-white">
-      <div className="flex h-16 shrink-0 items-center px-6">
-        <span className="text-xl font-bold tracking-tight text-blue-600">TransitOps</span>
+    <aside className="w-64 bg-slate-900 border-r border-slate-800 flex flex-col h-full text-slate-300">
+      {/* Brand Header */}
+      <div className="h-16 flex items-center px-6 border-b border-slate-800 shrink-0">
+        <span className="text-lg font-bold text-white tracking-wide">TransitOps</span>
       </div>
-      <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
-        <nav className="mt-5 flex-1 space-y-1 bg-white px-3">
-          {navigation.map((item) => (
+
+      {/* Navigation */}
+      <nav className="flex-1 py-6 px-4 space-y-1">
+        {NAV_ITEMS.map((item) => {
+          const Icon = item.icon
+          const isActive = location.pathname === item.path
+
+          return (
             <Link
-              key={item.name}
-              to={item.href}
-              className="group flex items-center rounded-md px-2 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600"
+              key={item.path}
+              to={item.path}
+              className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                isActive
+                  ? 'bg-indigo-600 text-white'
+                  : 'hover:bg-slate-800 hover:text-white'
+              }`}
             >
-              <item.icon
-                className="mr-3 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-blue-600"
-                aria-hidden="true"
-              />
-              {item.name}
+              <Icon size={18} className={isActive ? 'text-white' : 'text-slate-400'} />
+              {item.label}
             </Link>
-          ))}
-        </nav>
+          )
+        })}
+      </nav>
+
+      {/* Footer */}
+      <div className="p-4 border-t border-slate-800">
+        <p className="text-xs text-slate-500">Person B · Fleet & Finance</p>
       </div>
-      <div className="border-t border-gray-200 p-4">
-        <Link
-          to="/settings"
-          className="group flex items-center rounded-md px-2 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600"
-        >
-          <Settings className="mr-3 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-blue-600" />
-          Settings
-        </Link>
-      </div>
-    </div>
-  );
+    </aside>
+  )
 }
