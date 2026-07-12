@@ -5,7 +5,7 @@ import Trips from "../pages/Trips";
 import Expenses from "../pages/Expenses";
 import Report from "../pages/Report";
 
-function AppRoutes() {
+function AppRoute() {
   return (
     <Routes>
       <Route path="/dashboard" element={<Dashboard />} />
@@ -16,4 +16,4 @@ function AppRoutes() {
   );
 }
 
-export default AppRoutes;
+export default AppRoute;
