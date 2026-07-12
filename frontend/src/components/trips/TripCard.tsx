@@ -37,7 +37,7 @@ export default function TripBoard() {
           return (
             <div
               key={status}
-              className="bg-slate-50/60 dark:bg-[#090d16] border border-slate-100 dark:border-slate-800/40 rounded-2xl p-4 flex flex-col min-h-[380px]"
+              className="bg-slate-50/60 dark:bg-[#090d16] border border-slate-100 dark:border-slate-800/40 rounded-2xl p-4 flex flex-col min-h-95"
             >
               {/* Column Header */}
               <div className="flex items-center justify-between mb-4 px-1">
@@ -57,7 +57,7 @@ export default function TripBoard() {
               {/* Card Dynamic Stack */}
               <div className="space-y-3 flex-1 overflow-y-auto custom-scrollbar">
                 {filteredTrips.length === 0 ? (
-                  <div className="h-full border-2 border-dashed border-slate-200/40 dark:border-slate-800/40 rounded-xl flex items-center justify-center p-4 min-h-[120px]">
+                  <div className="h-full border-2 border-dashed border-slate-200/40 dark:border-slate-800/40 rounded-xl flex items-center justify-center p-4 min-h-30">
                     <p className="text-[10px] font-semibold text-slate-400 dark:text-slate-600 uppercase tracking-wider text-center">
                       No matching assets
                     </p>

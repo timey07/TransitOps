@@ -38,7 +38,7 @@ export default function Navbar({ onMenuToggle }: NavbarProps) {
         </div>
         
         {/* Alignment Divider */}
-        <div className="h-5 w-[1px] bg-slate-200 dark:bg-slate-800/80" />
+        <div className="h-5 w-px-slate-200 dark:bg-slate-800/80" />
         
         <button 
           onClick={handleLogout}

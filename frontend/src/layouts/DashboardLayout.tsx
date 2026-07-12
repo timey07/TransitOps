@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import Sidebar from '../components/layout/Sidebar'
 import Navbar from '../components/layout/Navbar'
-import { Sun, Moon, Sparkles } from 'lucide-react'
+import { Sun, Moon } from 'lucide-react'
 
 interface DashboardLayoutProps {
   children?: React.ReactNode

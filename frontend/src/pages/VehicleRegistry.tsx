@@ -185,7 +185,7 @@ export default function VehicleRegistry() {
                 <tr key={vehicle.id} className="hover:bg-slate-50/40 dark:hover:bg-slate-900/20 transition-colors">
                   <td className="whitespace-nowrap px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="h-9 w-9 flex-shrink-0 flex items-center justify-center rounded-xl bg-slate-50 dark:bg-[#030712] border border-slate-100 dark:border-slate-800/50 text-slate-400 dark:text-slate-500">
+                      <div className="h-9 w-9 shrink-0 flex items-center justify-center rounded-xl bg-slate-50 dark:bg-[#030712] border border-slate-100 dark:border-slate-800/50 text-slate-400 dark:text-slate-500">
                         <Truck className="h-4 w-4" />
                       </div>
                       <div>
