@@ -20,7 +20,17 @@ const vehicleSchema = z.object({
 // GET all vehicles
 router.get('/', async (req, res) => {
   try {
+    const { type, status, search } = req.query;
+    
+    const where: any = {};
+    if (type && type !== 'All') where.type = String(type);
+    if (status && status !== 'All') where.status = String(status);
+    if (search) {
+      where.registrationNo = { contains: String(search) }; // SQLite supports contains
+    }
+
     const vehicles = await prisma.vehicle.findMany({
+      where,
       orderBy: { registrationNo: 'asc' }
     });
     res.json(vehicles);
