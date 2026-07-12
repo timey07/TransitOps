@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import MainLayout from "./components/layout/MainLayout";
 import VehicleRegistry from "./pages/VehicleRegistry";
 import Login from "./pages/Login";
+import Drivers from "./pages/Drivers";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const token = localStorage.getItem('token');
@@ -26,7 +27,7 @@ function App() {
         >
           <Route index element={<div>Dashboard Page Placeholder</div>} />
           <Route path="vehicles" element={<VehicleRegistry />} />
-          <Route path="drivers" element={<div>Driver Profiles Placeholder</div>} />
+          <Route path="drivers" element={<Drivers />} />
           <Route path="trips" element={<div>Trip Dispatcher Placeholder</div>} />
           <Route path="maintenance" element={<div>Maintenance Placeholder</div>} />
           <Route path="expenses" element={<div>Fuel & Expenses Placeholder</div>} />
