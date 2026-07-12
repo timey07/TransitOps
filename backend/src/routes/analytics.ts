@@ -73,7 +73,8 @@ router.get('/dashboard', async (req, res) => {
       return {
         id: v.id,
         registrationNo: v.registrationNo,
-        roi
+        roi,
+        totalCost: vMaintCost + vFuelCost
       };
     });
 
