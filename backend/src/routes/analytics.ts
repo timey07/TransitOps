@@ -7,12 +7,19 @@ const prisma = new PrismaClient();
 // GET /api/analytics/dashboard
 router.get('/dashboard', async (req, res) => {
   try {
-    // Vehicles counts
-    const totalVehicles = await prisma.vehicle.count();
-    const availableVehicles = await prisma.vehicle.count({ where: { status: 'AVAILABLE' } });
-    const inShopVehicles = await prisma.vehicle.count({ where: { status: 'IN_SHOP' } });
-    const onTripVehicles = await prisma.vehicle.count({ where: { status: 'ON_TRIP' } });
-    const retiredVehicles = await prisma.vehicle.count({ where: { status: 'RETIRED' } });
+    const { type, status } = req.query;
+
+    // Build the where clause for vehicles based on query filters
+    const vehicleWhere: any = {};
+    if (type) vehicleWhere.type = String(type);
+    if (status) vehicleWhere.status = String(status);
+
+    // Vehicles counts (with filters applied)
+    const totalVehicles = await prisma.vehicle.count({ where: vehicleWhere });
+    const availableVehicles = await prisma.vehicle.count({ where: { ...vehicleWhere, status: 'AVAILABLE' } });
+    const inShopVehicles = await prisma.vehicle.count({ where: { ...vehicleWhere, status: 'IN_SHOP' } });
+    const onTripVehicles = await prisma.vehicle.count({ where: { ...vehicleWhere, status: 'ON_TRIP' } });
+    const retiredVehicles = await prisma.vehicle.count({ where: { ...vehicleWhere, status: 'RETIRED' } });
     const activeVehicles = totalVehicles - retiredVehicles;
 
     // Drivers counts

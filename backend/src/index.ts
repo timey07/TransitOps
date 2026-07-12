@@ -19,6 +19,7 @@ import maintenanceRouter from './routes/maintenance';
 import tripsRouter from './routes/trips';
 import expensesRouter from './routes/expenses';
 import analyticsRouter from './routes/analytics';
+import reportsRouter from './routes/reports';
 
 import { authenticateToken } from './routes/auth';
 
@@ -34,6 +35,7 @@ app.use('/api/maintenance', authenticateToken, maintenanceRouter);
 app.use('/api/trips', authenticateToken, tripsRouter);
 app.use('/api/expenses', authenticateToken, expensesRouter);
 app.use('/api/analytics', authenticateToken, analyticsRouter);
+app.use('/api/reports', authenticateToken, reportsRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
