@@ -40,13 +40,15 @@ router.get('/dashboard', async (req, res) => {
       include: {
         trips: true,
         maintenance: true,
-        fuelLogs: true
+        fuelLogs: true,
+        expenses: true
       }
     });
 
     let totalRevenue = 0;
     let totalMaintenanceCost = 0;
     let totalFuelCost = 0;
+    let totalOtherExpenseCost = 0;
     let totalAcquisitionCost = 0;
     let totalDistance = 0;
     let totalFuelLiters = 0;
@@ -56,12 +58,14 @@ router.get('/dashboard', async (req, res) => {
       const vMaintCost = v.maintenance.reduce((sum, log) => sum + log.cost, 0);
       const vFuelCost = v.fuelLogs.reduce((sum, log) => sum + log.cost, 0);
       const vFuelLiters = v.fuelLogs.reduce((sum, log) => sum + log.liters, 0);
+      const vOtherExpenseCost = v.expenses.reduce((sum, expense) => sum + expense.tollCost + expense.otherCost, 0);
       
       const vTotalDistance = v.trips.reduce((sum, trip) => sum + trip.plannedDistanceKm, 0); // Simplified using planned
 
       totalRevenue += vRevenue;
       totalMaintenanceCost += vMaintCost;
       totalFuelCost += vFuelCost;
+      totalOtherExpenseCost += vOtherExpenseCost;
       totalAcquisitionCost += v.acquisitionCost;
       totalDistance += vTotalDistance;
       totalFuelLiters += vFuelLiters;
@@ -74,11 +78,11 @@ router.get('/dashboard', async (req, res) => {
         id: v.id,
         registrationNo: v.registrationNo,
         roi,
-        totalCost: vMaintCost + vFuelCost
+        totalCost: vMaintCost + vFuelCost + vOtherExpenseCost
       };
     });
 
-    const overallOperationalCost = totalMaintenanceCost + totalFuelCost;
+    const overallOperationalCost = totalMaintenanceCost + totalFuelCost + totalOtherExpenseCost;
     const overallFuelEfficiency = totalFuelLiters > 0 ? (totalDistance / totalFuelLiters) : 0;
 
     res.json({

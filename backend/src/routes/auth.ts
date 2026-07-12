@@ -16,7 +16,8 @@ const registerSchema = z.object({
 
 const loginSchema = z.object({
   email: z.string().email(),
-  password: z.string()
+  password: z.string(),
+  role: z.enum(['FLEET_MANAGER', 'DISPATCHER', 'SAFETY_OFFICER', 'FINANCIAL_ANALYST'])
 });
 
 // POST register (useful for seeding default users or creating users)
@@ -63,15 +64,11 @@ router.post('/login', async (req, res) => {
       return res.status(403).json({ error: 'Account locked after 5 failed attempts. Please try again later.' });
     }
 
-    // Check role match
-    if (user.role !== role) {
-      // Magic bypass for testing: allow admin@transitops.com to switch roles dynamically
-      if (user.email === 'admin@transitops.com') {
-        user.role = role;
-      } else {
-        await handleFailedLogin(user);
-        return res.status(400).json({ error: 'Invalid role selection' });
-      }
+    // The seeded hackathon account may demonstrate each role. All other users
+    // must use the role assigned at registration.
+    if (user.role !== role && user.email !== 'admin@transitops.com') {
+      await handleFailedLogin(user);
+      return res.status(400).json({ error: 'Invalid role selection' });
     }
 
     // Check password
@@ -87,8 +84,9 @@ router.post('/login', async (req, res) => {
       data: { failedAttempts: 0, lockedUntil: null }
     });
 
+    const effectiveRole = user.email === 'admin@transitops.com' ? role : user.role;
     const token = jwt.sign(
-      { userId: user.id, email: user.email, role: user.role },
+      { userId: user.id, email: user.email, role: effectiveRole },
       JWT_SECRET,
       { expiresIn: '8h' }
     );
@@ -98,7 +96,7 @@ router.post('/login', async (req, res) => {
       user: {
         id: user.id,
         email: user.email,
-        role: user.role
+        role: effectiveRole
       }
     });
   } catch (error) {

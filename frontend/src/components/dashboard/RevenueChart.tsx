@@ -18,6 +18,7 @@ interface MonthlyRevenueData {
 
 interface RevenueChartProps {
   data?: MonthlyRevenueData[]
+  formatValue?: (value: number) => string
 }
 
 const DEFAULT_DATA: MonthlyRevenueData[] = [
@@ -29,7 +30,7 @@ const DEFAULT_DATA: MonthlyRevenueData[] = [
   { month: 'Jun', revenue: 710000, target: 600000 },
 ]
 
-export default function RevenueChart({ data = DEFAULT_DATA }: RevenueChartProps) {
+export default function RevenueChart({ data = DEFAULT_DATA, formatValue }: RevenueChartProps) {
   const [isDark, setIsDark] = useState(false)
 
   useEffect(() => {
@@ -41,6 +42,7 @@ export default function RevenueChart({ data = DEFAULT_DATA }: RevenueChartProps)
   }, [])
 
   const formatCurrency = (val: number) => {
+    if (formatValue) return formatValue(val)
     if (val >= 100000) return `₹${(val / 100000).toFixed(1)}L`
     return `₹${val}`
   }

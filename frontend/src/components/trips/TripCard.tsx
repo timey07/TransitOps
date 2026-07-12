@@ -1,77 +1,14 @@
-import TripCard from "./TripCard";
+import { MapPin, Package, UserRound } from 'lucide-react'
+import type { Trip } from '../../types/trip'
 
-const trips = [
-  {
-    source: "Lucknow",
-    destination: "Delhi",
-    vehicle: "Van-05",
-    driver: "Alex",
-    cargo: 450,
-    status: "Dispatched"
-  },
-  {
-    source: "Kanpur",
-    destination: "Agra",
-    vehicle: "Truck-02",
-    driver: "John",
-    cargo: 700,
-    status: "Completed"
-  }
-];
+type Props = { trip: Trip; busy: boolean; onDispatch: (trip: Trip) => void; onComplete: (trip: Trip) => void; onCancel: (trip: Trip) => void }
 
-export default function TripBoard() {
-  const statuses = ["Draft", "Dispatched", "Completed", "Cancelled"];
-
+export default function TripCard({ trip, busy, onDispatch, onComplete, onCancel }: Props) {
   return (
-    <div className="space-y-4">
-      <div className="border-b border-slate-100 dark:border-slate-800/60 pb-3">
-        <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-          Logistics Lifecycle Board
-        </h3>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
-        {statuses.map((status) => {
-          const filteredTrips = trips.filter((trip) => trip.status === status);
-          
-          return (
-            <div
-              key={status}
-              className="bg-slate-50/60 dark:bg-[#090d16] border border-slate-100 dark:border-slate-800/40 rounded-2xl p-4 flex flex-col min-h-95"
-            >
-              {/* Column Header */}
-              <div className="flex items-center justify-between mb-4 px-1">
-                <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2">
-                  <span className={`h-1.5 w-1.5 rounded-full ${
-                    status === 'Draft' ? 'bg-slate-400' :
-                    status === 'Dispatched' ? 'bg-indigo-500' :
-                    status === 'Completed' ? 'bg-emerald-500' : 'bg-rose-500'
-                  }`} />
-                  {status}
-                </h4>
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-200/50 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
-                  {filteredTrips.length}
-                </span>
-              </div>
-
-              {/* Card Dynamic Stack */}
-              <div className="space-y-3 flex-1 overflow-y-auto custom-scrollbar">
-                {filteredTrips.length === 0 ? (
-                  <div className="h-full border-2 border-dashed border-slate-200/40 dark:border-slate-800/40 rounded-xl flex items-center justify-center p-4 min-h-30">
-                    <p className="text-[10px] font-semibold text-slate-400 dark:text-slate-600 uppercase tracking-wider text-center">
-                      No matching assets
-                    </p>
-                  </div>
-                ) : (
-                  filteredTrips.map((trip, index) => (
-                    <TripCard key={index} {...trip} />
-                  ))
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
+    <article className="rounded-xl border border-slate-200/70 bg-white p-4 shadow-sm dark:border-slate-800/70 dark:bg-[#030712]">
+      <div className="flex items-start justify-between gap-3"><div><p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{trip.vehicle.registrationNo}</p><h5 className="mt-1 text-xs font-bold text-slate-900 dark:text-white">{trip.source} → {trip.destination}</h5></div><span className="rounded-md bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-600 dark:bg-slate-800 dark:text-slate-300">{trip.plannedDistanceKm} km</span></div>
+      <div className="mt-3 space-y-2 border-t border-slate-100 pt-3 text-[11px] font-medium text-slate-500 dark:border-slate-800 dark:text-slate-400"><p className="flex items-center gap-2"><UserRound size={13} />{trip.driver.name}</p><p className="flex items-center gap-2"><Package size={13} />{trip.cargoWeightKg.toLocaleString()} kg / {trip.vehicle.capacityKg.toLocaleString()} kg</p><p className="flex items-center gap-2"><MapPin size={13} />{trip.vehicle.name}</p></div>
+      {(trip.status === 'DRAFT' || trip.status === 'DISPATCHED') && <div className="mt-4 flex gap-2"><button disabled={busy} onClick={() => trip.status === 'DRAFT' ? onDispatch(trip) : onComplete(trip)} className="flex-1 rounded-lg bg-indigo-600 px-3 py-2 text-[10px] font-bold text-white transition-colors hover:bg-indigo-700 disabled:opacity-50">{trip.status === 'DRAFT' ? 'Dispatch' : 'Complete'}</button><button disabled={busy} onClick={() => onCancel(trip)} className="rounded-lg border border-rose-200 px-3 py-2 text-[10px] font-bold text-rose-600 transition-colors hover:bg-rose-50 disabled:opacity-50 dark:border-rose-900/40 dark:hover:bg-rose-950/20">Cancel</button></div>}
+    </article>
+  )
 }

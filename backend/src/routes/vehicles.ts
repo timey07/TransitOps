@@ -26,7 +26,11 @@ router.get('/', async (req, res) => {
     if (type && type !== 'All') where.type = String(type);
     if (status && status !== 'All') where.status = String(status);
     if (search) {
-      where.registrationNo = { contains: String(search) }; // SQLite supports contains
+      const value = String(search);
+      where.OR = [
+        { registrationNo: { contains: value } },
+        { name: { contains: value } }
+      ];
     }
 
     const vehicles = await prisma.vehicle.findMany({

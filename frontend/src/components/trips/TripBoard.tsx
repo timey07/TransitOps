@@ -1,77 +1,11 @@
-import TripCard from "./TripCard";
+import TripCard from './TripCard'
+import type { Trip, TripStatus } from '../../types/trip'
 
-const trips = [
-  {
-    source: "Lucknow",
-    destination: "Delhi",
-    vehicle: "Van-05",
-    driver: "Alex",
-    cargo: 450,
-    status: "Dispatched"
-  },
-  {
-    source: "Kanpur",
-    destination: "Agra",
-    vehicle: "Truck-02",
-    driver: "John",
-    cargo: 700,
-    status: "Completed"
-  }
-];
+type Props = { trips: Trip[]; busyId: string | null; onDispatch: (trip: Trip) => void; onComplete: (trip: Trip) => void; onCancel: (trip: Trip) => void }
+const columns: Array<{ label: string; status: TripStatus; dot: string }> = [
+  { label: 'Draft', status: 'DRAFT', dot: 'bg-slate-400' }, { label: 'Dispatched', status: 'DISPATCHED', dot: 'bg-indigo-500' }, { label: 'Completed', status: 'COMPLETED', dot: 'bg-emerald-500' }, { label: 'Cancelled', status: 'CANCELLED', dot: 'bg-rose-500' }
+]
 
-export default function TripBoard() {
-  const statuses = ["Draft", "Dispatched", "Completed", "Cancelled"];
-
-  return (
-    <div className="space-y-4">
-      <div className="border-b border-slate-100 dark:border-slate-800/60 pb-3">
-        <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-          Logistics Lifecycle Board
-        </h3>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
-        {statuses.map((status) => {
-          const filteredTrips = trips.filter((trip) => trip.status === status);
-          
-          return (
-            <div
-              key={status}
-              className="bg-slate-50/60 dark:bg-[#090d16] border border-slate-100 dark:border-slate-800/40 rounded-2xl p-4 flex flex-col min-h-95"
-            >
-              {/* Column Header */}
-              <div className="flex items-center justify-between mb-4 px-1">
-                <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2">
-                  <span className={`h-1.5 w-1.5 rounded-full ${
-                    status === 'Draft' ? 'bg-slate-400' :
-                    status === 'Dispatched' ? 'bg-indigo-500' :
-                    status === 'Completed' ? 'bg-emerald-500' : 'bg-rose-500'
-                  }`} />
-                  {status}
-                </h4>
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-200/50 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
-                  {filteredTrips.length}
-                </span>
-              </div>
-
-              {/* Card Dynamic Stack */}
-              <div className="space-y-3 flex-1 overflow-y-auto custom-scrollbar">
-                {filteredTrips.length === 0 ? (
-                  <div className="h-full border-2 border-dashed border-slate-200/40 dark:border-slate-800/40 rounded-xl flex items-center justify-center p-4 min-h-30">
-                    <p className="text-[10px] font-semibold text-slate-400 dark:text-slate-600 uppercase tracking-wider text-center">
-                      No matching assets
-                    </p>
-                  </div>
-                ) : (
-                  filteredTrips.map((trip, index) => (
-                    <TripCard key={index} {...trip} />
-                  ))
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
+export default function TripBoard({ trips, busyId, onDispatch, onComplete, onCancel }: Props) {
+  return <div className="space-y-4"><div className="border-b border-slate-100 pb-3 dark:border-slate-800/60"><h3 className="text-sm font-bold tracking-tight text-slate-900 dark:text-slate-100">Logistics Lifecycle Board</h3></div><div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">{columns.map((column) => { const matchingTrips = trips.filter((trip) => trip.status === column.status); return <section key={column.status} className="flex min-h-[380px] flex-col rounded-2xl border border-slate-100 bg-slate-50/60 p-4 dark:border-slate-800/40 dark:bg-[#090d16]"><div className="mb-4 flex items-center justify-between px-1"><h4 className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400"><span className={`h-1.5 w-1.5 rounded-full ${column.dot}`} />{column.label}</h4><span className="rounded bg-slate-200/50 px-1.5 py-0.5 text-[10px] font-bold text-slate-600 dark:bg-slate-800 dark:text-slate-400">{matchingTrips.length}</span></div><div className="flex-1 space-y-3">{matchingTrips.length ? matchingTrips.map((trip) => <TripCard key={trip.id} trip={trip} busy={busyId === trip.id} onDispatch={onDispatch} onComplete={onComplete} onCancel={onCancel} />) : <div className="flex min-h-30 items-center justify-center rounded-xl border-2 border-dashed border-slate-200/40 p-4 dark:border-slate-800/40"><p className="text-center text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-600">No trips</p></div>}</div></section>})}</div></div>
 }

@@ -46,6 +46,9 @@ router.post('/', async (req, res) => {
     if (vehicle.status === 'ON_TRIP') {
       return res.status(400).json({ error: 'Vehicle is currently on an active trip' });
     }
+    if (vehicle.status === 'RETIRED') {
+      return res.status(400).json({ error: 'Retired vehicles cannot be placed in maintenance' });
+    }
 
     const log = await prisma.$transaction(async (tx) => {
       // 1. Create log
@@ -100,11 +103,24 @@ router.patch('/:id/complete', async (req, res) => {
         data: { status: 'COMPLETED' }
       });
 
-      // 3. Update vehicle status to AVAILABLE
-      await tx.vehicle.update({
-        where: { id: existingLog.vehicleId },
-        data: { status: 'AVAILABLE' }
-      });
+      // Keep the vehicle in the shop while another active log remains, and
+      // never revive a retired vehicle when maintenance is closed.
+      const [vehicle, activeLogs] = await Promise.all([
+        tx.vehicle.findUnique({ where: { id: existingLog.vehicleId } }),
+        tx.maintenanceLog.count({
+          where: {
+            vehicleId: existingLog.vehicleId,
+            status: 'ACTIVE',
+            id: { not: existingLog.id }
+          }
+        })
+      ]);
+      if (vehicle && vehicle.status !== 'RETIRED') {
+        await tx.vehicle.update({
+          where: { id: existingLog.vehicleId },
+          data: { status: activeLogs > 0 ? 'IN_SHOP' : 'AVAILABLE' }
+        });
+      }
 
       return updatedLog;
     });

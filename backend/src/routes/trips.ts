@@ -17,7 +17,18 @@ const createTripSchema = z.object({
 
 const completeTripSchema = z.object({
   finalOdometerKm: z.number().positive(),
-  revenue: z.number().nonnegative().optional()
+  revenue: z.number().nonnegative().optional(),
+  fuelLiters: z.number().positive().optional(),
+  fuelCost: z.number().nonnegative().optional(),
+  fuelDate: z.coerce.date().optional()
+}).superRefine((data, context) => {
+  if ((data.fuelLiters === undefined) !== (data.fuelCost === undefined)) {
+    context.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'Fuel liters and fuel cost must be recorded together',
+      path: ['fuelCost']
+    });
+  }
 });
 
 // GET all trips
@@ -76,7 +87,7 @@ router.post('/', async (req, res) => {
     res.status(201).json(trip);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      res.status(400).json({ error: error.errors });
+      res.status(400).json({ error: 'Invalid trip data', details: error.issues });
     } else {
       res.status(500).json({ error: 'Failed to create trip' });
     }
@@ -98,6 +109,9 @@ router.patch('/:id/dispatch', async (req, res) => {
       const d = await tx.driver.findUnique({ where: { id: trip.driverId } });
       if (v?.status !== 'AVAILABLE' || d?.status !== 'AVAILABLE') {
         throw new Error('Vehicle or Driver became unavailable');
+      }
+      if (new Date(d.licenseExpiry) < new Date()) {
+        throw new Error('Driver license is expired');
       }
 
       const updatedTrip = await tx.trip.update({
@@ -135,6 +149,12 @@ router.patch('/:id/complete', async (req, res) => {
     if (trip.status !== 'DISPATCHED') return res.status(400).json({ error: 'Only DISPATCHED trips can be completed' });
 
     const result = await prisma.$transaction(async (tx) => {
+      const vehicle = await tx.vehicle.findUnique({ where: { id: trip.vehicleId } });
+      if (!vehicle) throw new Error('Vehicle not found');
+      if (data.finalOdometerKm < vehicle.odometerKm) {
+        throw new Error('Final odometer cannot be lower than the current odometer');
+      }
+
       const updatedTrip = await tx.trip.update({
         where: { id: tripId },
         data: { 
@@ -156,13 +176,24 @@ router.patch('/:id/complete', async (req, res) => {
         data: { status: 'AVAILABLE' }
       });
 
+      if (data.fuelLiters !== undefined && data.fuelCost !== undefined) {
+        await tx.fuelLog.create({
+          data: {
+            vehicleId: trip.vehicleId,
+            liters: data.fuelLiters,
+            cost: data.fuelCost,
+            date: data.fuelDate ?? new Date()
+          }
+        });
+      }
+
       return updatedTrip;
     });
 
     res.json(result);
   } catch (error: any) {
     if (error instanceof z.ZodError) {
-      res.status(400).json({ error: error.errors });
+      res.status(400).json({ error: 'Invalid completion data', details: error.issues });
     } else {
       res.status(400).json({ error: error.message || 'Failed to complete trip' });
     }

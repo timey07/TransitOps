@@ -61,7 +61,7 @@ router.post('/fuel', async (req, res) => {
     res.status(201).json(log);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      res.status(400).json({ error: error.errors });
+      res.status(400).json({ error: 'Invalid fuel log data', details: error.issues });
     } else {
       res.status(500).json({ error: 'Failed to create fuel log' });
     }
@@ -79,6 +79,9 @@ router.post('/expense', async (req, res) => {
     if (data.tripId) {
       const trip = await prisma.trip.findUnique({ where: { id: data.tripId } });
       if (!trip) return res.status(404).json({ error: 'Trip not found' });
+      if (trip.vehicleId !== data.vehicleId) {
+        return res.status(400).json({ error: 'The selected trip belongs to a different vehicle' });
+      }
     }
 
     const expense = await prisma.expense.create({
@@ -94,7 +97,7 @@ router.post('/expense', async (req, res) => {
     res.status(201).json(expense);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      res.status(400).json({ error: error.errors });
+      res.status(400).json({ error: 'Invalid expense data', details: error.issues });
     } else {
       res.status(500).json({ error: 'Failed to create expense' });
     }

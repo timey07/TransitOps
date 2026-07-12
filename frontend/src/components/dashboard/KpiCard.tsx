@@ -23,7 +23,7 @@ export default function KPICard({
   trend,
 }: KPICardProps) {
   return (
-    <div className="bg-white dark:bg-[#090d16] rounded-2xl border border-slate-200/80 dark:border-slate-800/60 p-6 shadow-[0_2px_12px_-3px_rgba(0,0,0,0.01)] dark:shadow-none hover:border-slate-300 dark:hover:border-slate-700/80 transition-all duration-300 flex flex-col justify-between min-h-38.75">
+    <div className="flex min-h-[155px] flex-col justify-between rounded-2xl border border-slate-200/80 bg-white p-6 shadow-[0_2px_12px_-3px_rgba(0,0,0,0.01)] transition-all duration-300 hover:border-slate-300 dark:border-slate-800/60 dark:bg-[#090d16] dark:shadow-none dark:hover:border-slate-700/80">
       <div className="w-full">
         <div className="flex items-start justify-between gap-3">
           <div className="space-y-1.5">

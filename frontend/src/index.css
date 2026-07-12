@@ -1,5 +1,26 @@
 @import "tailwindcss";
 
+/* Tailwind v4's default dark variant follows the operating-system setting.
+   TransitOps has an in-app theme switch, so the `.dark` class must be the
+   source of truth instead. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  color-scheme: light;
+  background: #f8fafc;
+}
+
+:root.dark {
+  color-scheme: dark;
+  background: #030712;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
 /* Base input styling */
 .input {
   width: 100%;
