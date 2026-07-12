@@ -15,12 +15,14 @@ app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 const vehicles_1 = __importDefault(require("./routes/vehicles"));
 const auth_1 = __importDefault(require("./routes/auth"));
+const drivers_1 = __importDefault(require("./routes/drivers"));
 // Basic health check endpoint
 app.get('/health', (req, res) => {
     res.json({ status: 'ok', message: 'TransitOps Backend API is running' });
 });
 app.use('/api/vehicles', vehicles_1.default);
 app.use('/api/auth', auth_1.default);
+app.use('/api/drivers', drivers_1.default);
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
