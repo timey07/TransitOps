@@ -1,5 +1,5 @@
 import { Truck, CheckCircle2, Wrench, Navigation, TrendingUp } from 'lucide-react'
-import KPICard from '../components/dashboard/KpiCard'
+import KPICard from '../components/dashboard/KPICard'
 import FleetUtilizationChart from '../components/dashboard/FleetUtilizationChart'
 import RevenueChart from '../components/dashboard/RevenueChart'
 
@@ -8,7 +8,7 @@ export default function Dashboard() {
     <div className="space-y-6">
       {/* Page Header */}
       <div>
-        <h2 className="text-xl font-bold text-slate-900">Dashboard</h2>
+        <h2 className="text-xl font-bold text-slate-900">TransitOps Dashboard</h2>
         <p className="text-sm text-slate-500 mt-1">Real-time fleet operations performance and metrics</p>
       </div>
 
