@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Outlet } from 'react-router-dom'
 import Sidebar from '../components/layout/Sidebar'
 import Navbar from '../components/layout/Navbar'
 
@@ -32,7 +33,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       <div className="flex flex-col flex-1 min-w-0 h-full overflow-hidden">
         <Navbar onMenuToggle={() => setSidebarOpen(true)} />
         <main className="flex-1 overflow-y-auto p-6">
-          {children}
+          {children || <Outlet />}
         </main>
       </div>
     </div>
