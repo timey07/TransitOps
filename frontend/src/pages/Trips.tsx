@@ -3,27 +3,22 @@ import TripBoard from "../components/trips/TripBoard";
 
 export default function Trips() {
   return (
-    <div className="space-y-6">
-
-      {/* Header */}
+    <div className="space-y-8">
+      {/* Header Panel */}
       <div>
-        <h2 className="text-xl font-bold text-slate-900">
+        <h2 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
           Trip Dispatcher
         </h2>
-
-        <p className="text-sm text-slate-500 mt-1">
-          Create and monitor vehicle trips
+        <p className="text-xs font-medium text-slate-400 dark:text-slate-500 mt-1">
+          Create, schedule, route, and monitor active fleet logistics deployments.
         </p>
       </div>
 
-
-      {/* Trip Creation */}
+      {/* Trip Creation Form Matrix */}
       <TripForm />
 
-
-      {/* Trip Board */}
+      {/* Kanban Lifecycle Board */}
       <TripBoard />
-
     </div>
   );
 }
