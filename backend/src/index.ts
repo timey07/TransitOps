@@ -13,6 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 import vehiclesRouter from './routes/vehicles';
+import authRouter from './routes/auth';
 
 // Basic health check endpoint
 app.get('/health', (req, res) => {
@@ -20,6 +21,7 @@ app.get('/health', (req, res) => {
 });
 
 app.use('/api/vehicles', vehiclesRouter);
+app.use('/api/auth', authRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
