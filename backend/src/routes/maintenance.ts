@@ -9,8 +9,8 @@ const prisma = new PrismaClient();
 const maintenanceSchema = z.object({
   vehicleId: z.string().uuid(),
   serviceType: z.string().min(2),
-  cost: z.number().positive(),
-  date: z.string().transform((str) => new Date(str)),
+  cost: z.number().nonnegative(),
+  date: z.string().optional().transform(str => str ? new Date(str) : new Date()),
   status: z.enum(['ACTIVE', 'COMPLETED']).optional()
 });
 

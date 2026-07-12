@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TransitOps 🚚 - Smart Transport Operations Platform
 
-## Getting Started
+A next-generation, full-stack Fleet Management and Logistics platform built for the modern era. TransitOps handles end-to-end operational telemetry, automated maintenance tracking, dispatch scheduling, and financial analytics for commercial fleets.
 
-First, run the development server:
+---
 
+## 🎯 The Problem & Our Solution
+The logistics industry struggles with fragmented tools—using different software for vehicle registries, driver rosters, trip tracking, and expense ledgers. This leads to operational inefficiencies, missed maintenance schedules, and poor ROI visibility. 
+
+**TransitOps** unifies all these pillars into a single, cohesive, premium dashboard. 
+
+*(For a deeper dive into our design goals, please refer to the included `TransitOps Smart Transport Operations Platform.pdf` problem statement in this repository).*
+
+## ✨ Core Features
+*   **Role-Based Access Control (RBAC):** Secure login with distinct permission scopes (Fleet Manager, Dispatcher, Safety Officer, Financial Analyst) and a secure lockout mechanism after 5 failed attempts.
+*   **Asset & Vehicle Registry:** Track heavy-duty machinery, transport vans, and payload capacities. Supports **Bulk CSV Import** with strict error handling and validation.
+*   **Predictive Maintenance:** Log vehicle issues. Vehicles are automatically marked as "IN_SHOP" preventing accidental dispatch, keeping drivers safe.
+*   **Kanban Trip Dispatching:** Drag-and-drop styled dispatch board to manage active fleet deployments.
+*   **Financial & ROI Analytics:** Auto-calculates fuel efficiency (Km/L) and vehicle-specific Return on Investment (ROI) based on revenue, maintenance costs, and fuel logs.
+
+## 🛠️ Tech Stack
+*   **Frontend:** React, TypeScript, Vite, Tailwind CSS (Glassmorphism & Modern Dark Mode UI), Lucide Icons, React Hook Form
+*   **Backend:** Node.js, Express, TypeScript, Zod (Validation), Prisma (ORM), SQLite (Database), JSON Web Tokens (Auth)
+
+---
+
+## 🚀 Local Setup & Installation
+
+### 1. Backend Setup
 ```bash
+cd backend
+npm install
+# Sync the database schema
+npx prisma db push
+# Seed the initial admin user
+npx tsx seed.ts
+# Start the backend server (runs on port 3000)
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Frontend Setup
+Open a new terminal window:
+```bash
+cd frontend
+npm install
+# Start the Vite development server
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🔑 Demo Access
+To easily evaluate the platform, use the seeded test account:
 
-## Learn More
+*   **Email:** `admin@transitops.com`
+*   **Password:** `password123`
+*   **Role:** `FLEET_MANAGER`
 
-To learn more about Next.js, take a look at the following resources:
+*(Note: Try entering the wrong password 5 times to see the security lockout trigger in action!)*
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🤝 Contributors
+*   **Sonee** - *Hackathon Participant & Primary Contributor*
+*   **Teammate** - *Co-Creator & Project Partner*
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Built with passion for modern logistics. 🚀

@@ -105,8 +105,9 @@ router.get('/dashboard', async (req, res) => {
       vehicleROI
     });
 
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch dashboard analytics' });
+  } catch (error: any) {
+    console.error('DASHBOARD ERROR:', error);
+    res.status(500).json({ error: 'Failed to fetch dashboard analytics', details: error.message, stack: error.stack });
   }
 });
 

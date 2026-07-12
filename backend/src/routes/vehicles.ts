@@ -112,7 +112,7 @@ router.post('/upload', upload.single('file'), (req, res) => {
   const errors: any[] = [];
 
   fs.createReadStream(req.file.path)
-    .pipe(csv())
+    .pipe(csv({ mapHeaders: ({ header }) => header.trim().replace(/^[\u200B\u200C\u200D\u200E\u200F\uFEFF]/,"") }))
     .on('data', (data) => results.push(data))
     .on('end', async () => {
       // Clean up the uploaded file
@@ -142,8 +142,8 @@ router.post('/upload', upload.single('file'), (req, res) => {
           } else {
             errors.push({ registrationNo: parsedData.registrationNo, error: 'Already exists' });
           }
-        } catch (err) {
-          errors.push({ row, error: 'Validation failed' });
+        } catch (err: any) {
+          errors.push({ row, error: err.issues || err.message || 'Validation failed' });
         }
       }
 

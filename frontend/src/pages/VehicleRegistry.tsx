@@ -97,7 +97,11 @@ export default function VehicleRegistry() {
       
       const data = await res.json();
       if (res.ok) {
-        alert(data.message);
+        let msg = data.message;
+        if (data.errors && data.errors.length > 0) {
+          msg += `\nFailed to add ${data.errors.length} rows. First error: ${JSON.stringify(data.errors[0])}`;
+        }
+        alert(msg);
         fetchVehicles();
       } else {
         alert('Upload failed: ' + data.error);
