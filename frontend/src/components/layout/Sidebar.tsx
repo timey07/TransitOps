@@ -1,9 +1,12 @@
 import { Link, useLocation } from 'react-router-dom'
-import { LayoutDashboard, Route, Receipt, BarChart3 } from 'lucide-react'
+import { LayoutDashboard, Route, Receipt, BarChart3, Truck, Users, Wrench } from 'lucide-react'
 
 const NAV_ITEMS = [
   { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+  { label: 'Vehicles', path: '/vehicles', icon: Truck },
+  { label: 'Drivers', path: '/drivers', icon: Users },
   { label: 'Trips', path: '/trips', icon: Route },
+  { label: 'Maintenance', path: '/maintenance', icon: Wrench },
   { label: 'Expenses', path: '/expenses', icon: Receipt },
   { label: 'Reports', path: '/reports', icon: BarChart3 },
 ]
