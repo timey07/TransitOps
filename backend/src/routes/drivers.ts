@@ -20,9 +20,22 @@ const driverSchema = z.object({
 router.get('/', async (req, res) => {
   try {
     const drivers = await prisma.driver.findMany({
+      include: {
+        _count: {
+          select: { trips: { where: { status: 'COMPLETED' } } }
+        }
+      },
       orderBy: { name: 'asc' }
     });
-    res.json(drivers);
+    
+    // Map the response to flatten the count for the frontend
+    const formattedDrivers = drivers.map(d => ({
+      ...d,
+      tripsCompleted: d._count.trips,
+      _count: undefined // Optional: remove the raw _count object
+    }));
+    
+    res.json(formattedDrivers);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to fetch drivers' });
