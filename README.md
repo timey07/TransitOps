@@ -59,7 +59,7 @@ To easily evaluate the platform, use the seeded test account:
 *(Note: Try entering the wrong password 5 times to see the security lockout trigger in action!)*
 
 ## 🤝 Contributors
-*   **Sonee** - *Hackathon Participant & Primary Contributor*
-*   **Teammate** - *Co-Creator & Project Partner*
+*   **timey07** - *Hackathon Participant & Primary Contributor*
+*   **aru-shi2** - *Co-Creator & Project Partner*
 
 Built with passion for modern logistics. 🚀
