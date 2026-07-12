@@ -55,14 +55,6 @@ export default function Sidebar() {
         })}
       </nav>
 
-      {/* Workspace Session Footer */}
-      <div className="p-5 border-t border-slate-800/60 bg-[#030712]/40">
-        <div className="flex flex-col gap-0.5">
-          <p className="text-[11px] font-bold text-slate-300 tracking-tight">Person B</p>
-          <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Fleet & Finance</p>
-        </div>
-      </div>
-
     </aside>
   )
 }

@@ -15,7 +15,7 @@ export default function Navbar({ onMenuToggle }: NavbarProps) {
   };
 
   return (
-    <header className="h-20 bg-white dark:bg-[#090d16] border-b border-slate-200/80 dark:border-slate-800/60 flex items-center justify-between px-8 shrink-0 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+    <header className="w-full h-20 bg-white dark:bg-[#090d16] border-b border-slate-200/80 dark:border-slate-800/60 flex items-center justify-between px-8 shrink-0 shadow-[0_1px_3px_rgba(0,0,0,0.02)] backdrop-blur-xl">
       
       {/* Left Aligned Sector */}
       <div className="flex items-center gap-6">
@@ -37,12 +37,12 @@ export default function Navbar({ onMenuToggle }: NavbarProps) {
           <User size={16} />
         </div>
         
-        {/* Alignment Divider */}
-        <div className="h-5 w-px-slate-200 dark:bg-slate-800/80" />
+        {/* Fixed Alignment Divider Typo */}
+        <div className="h-5 w-px bg-slate-200 dark:bg-slate-800/80" />
         
         <button 
           onClick={handleLogout}
-          className="flex items-center justify-center p-2 rounded-xl text-slate-400 dark:text-slate-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 hover:text-rose-600 dark:hover:text-rose-400 border border-transparent hover:border-rose-100 dark:hover:border-rose-900/30 transition-all"
+          className="flex items-center justify-center p-2 rounded-xl text-slate-400 dark:text-slate-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 hover:text-rose-600 dark:hover:text-rose-400 border border-transparent hover:border-rose-100 dark:hover:border-rose-900/30 transition-all cursor-pointer"
           title="Logout"
         >
           <LogOut size={18} />

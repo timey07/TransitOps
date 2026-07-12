@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X } from 'lucide-react';
+import { X, Shield, Lock, Mail, Users2 } from 'lucide-react';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -40,11 +40,8 @@ export default function Login() {
         throw new Error(data.error || 'Invalid credentials.');
       }
 
-      // Save token and user details to localStorage
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
-
-      // Navigate to dashboard
       navigate('/');
     } catch (err: any) {
       setError(err.message || 'Something went wrong');
@@ -54,134 +51,175 @@ export default function Login() {
   };
 
   return (
-    <div className="flex min-h-screen font-sans">
+    <div className="flex min-h-screen bg-[#030712] font-sans selection:bg-indigo-500/30 selection:text-indigo-200">
       
-      {/* Left Panel - Light */}
-      <div className="w-1/2 bg-[#d1d5db] relative flex flex-col p-16">
+      {/* Left Panel - Premium Synced Visual Deck */}
+      <div className="hidden lg:flex lg:w-1/2 bg-[#090d16] border-r border-slate-800/60 relative flex-col p-16 justify-between overflow-hidden">
         
-        <div className="mt-8">
-          <div className="w-12 h-12 bg-transparent border-2 border-amber-600 rounded grid grid-cols-3 gap-0.5 p-1 mb-6">
-            {[...Array(9)].map((_, i) => (
-              <div key={i} className="bg-amber-600 rounded-sm"></div>
-            ))}
+        {/* Strict Color Grid Pattern Background */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b15_1px,transparent_1px),linear-gradient(to_bottom,#1e293b10_1px,transparent_1px)] bg-[size:3rem_3rem]" />
+        
+        {/* Precise Application Theme Glowing Orb */}
+        <div className="absolute top-1/3 left-1/4 w-[450px] h-[450px] bg-indigo-500/5 rounded-full blur-[140px] pointer-events-none animate-pulse duration-[6000ms]" />
+        
+        <div className="relative z-10">
+          <div className="flex items-center gap-3 mb-12">
+            <div className="h-9 w-9 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400 font-bold font-mono text-sm shadow-[0_0_15px_rgba(99,102,241,0.05)]">
+              T
+            </div>
+            <span className="text-base font-black text-white tracking-wider uppercase">
+              Transit<span className="text-indigo-400">Ops</span>
+            </span>
           </div>
           
-          <h1 className="text-4xl font-semibold text-gray-900 tracking-tight">TransitOps</h1>
-          <p className="text-gray-600 mt-2 font-medium">Smart Transport Operations Platform</p>
+          <h1 className="text-4xl font-black text-white tracking-tight leading-[1.1]">
+            Automated Fleet <br />
+            <span className="text-indigo-400">Orchestration System</span>
+          </h1>
         </div>
 
-        <div className="my-auto">
-          <p className="text-gray-800 font-semibold mb-4 text-lg">One login, four roles:</p>
-          <ul className="space-y-3">
-            {['Fleet Manager', 'Dispatcher', 'Safety Officer', 'Financial Analyst'].map((r) => (
-              <li key={r} className="flex items-center text-gray-700 text-sm font-medium">
-                <span className="w-2 h-2 rounded-full bg-amber-600 mr-3"></span>
-                {r}
-              </li>
-            ))}
-          </ul>
+        {/* High-Fidelity App Wireframe Vector Mockup */}
+        <div className="relative z-10 my-auto max-w-sm w-full space-y-12">
+          <div className="p-5 bg-[#030712]/90 border border-slate-800/80 rounded-2xl relative shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-sm group hover:border-indigo-500/30 transition-colors duration-300">
+            <div className="absolute top-3 right-3 flex gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-slate-800" />
+              <span className="w-1.5 h-1.5 rounded-full bg-slate-800" />
+              <span className="w-1.5 h-1.5 rounded-full bg-indigo-500/40" />
+            </div>
+            
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-2 rounded-full bg-indigo-500 animate-ping" />
+                <div className="h-3 w-28 bg-indigo-500/10 rounded border border-indigo-500/20" />
+              </div>
+              
+              <div className="space-y-2 pt-1">
+                <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                  <div className="w-[78%] h-full bg-indigo-500 rounded-full shadow-[0_0_8px_#6366f1]" />
+                </div>
+                <div className="flex justify-between text-[10px] font-mono text-slate-500 font-bold">
+                  <span>METRIC CODES</span>
+                  <span className="text-indigo-400">78% EFFICIENCY</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="space-y-2 px-1">
+            <h3 className="text-sm font-bold text-slate-200 tracking-wide">Next-Gen Telematics Terminal</h3>
+            <p className="text-xs text-slate-400 leading-relaxed font-medium">
+              Synchronize real-time operational states, analyze metrics, and dispatch updates over isolated channels with enterprise-grade token execution.
+            </p>
+          </div>
         </div>
 
-        <div className="mt-auto text-xs text-gray-500 font-semibold uppercase tracking-wider">
-          TRANSITOPS © 2026 • RBAC ENABLED
+        <div className="relative z-10 text-[10px] font-bold text-slate-600 uppercase tracking-widest flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-indigo-500/30" />
+          TRANSITOPS CORE ENGINE • EST. 2026
         </div>
       </div>
 
-      {/* Right Panel - Dark */}
-      <div className="w-1/2 bg-[#111111] flex flex-col items-center justify-center relative">
+      {/* Right Panel - Core Authentication Module (UNTOUCHED Structure with Matched Colors) */}
+      <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-8 relative">
         
-        {/* Error State Overlay */}
+        {/* Floating System Alerts */}
         {error && (
-          <div className="absolute right-12 top-48 w-64 p-4 rounded-xl border border-dashed border-red-500 bg-[#1a1a1a] text-red-400 z-10 shadow-2xl">
-            <div className="flex items-start">
-              <X className="w-5 h-5 mr-2 shrink-0 mt-0.5 font-bold" />
-              <p className="text-sm font-medium leading-relaxed">
-                {error}
-              </p>
+          <div className="absolute right-8 top-8 left-8 sm:left-auto sm:w-80 p-4 rounded-xl border border-rose-500/30 bg-rose-950/10 backdrop-blur-md text-rose-400 z-20 shadow-2xl animate-in fade-in slide-in-from-top-4 duration-200">
+            <div className="flex items-start justify-between">
+              <div className="flex gap-2.5">
+                <X className="w-4 h-4 shrink-0 mt-0.5" />
+                <p className="text-xs font-bold tracking-wide leading-relaxed">{error}</p>
+              </div>
+              <button onClick={() => setError('')} className="text-rose-400/50 hover:text-rose-400 ml-2">
+                <X className="w-3.5 h-3.5" />
+              </button>
             </div>
           </div>
         )}
 
         <div className="w-full max-w-sm">
-          <h2 className="text-2xl font-semibold text-white mb-2">Sign in to your account</h2>
-          <p className="text-gray-400 text-sm mb-10">Enter your credentials to continue</p>
+          <header className="mb-8">
+            <h2 className="text-xl font-black text-white tracking-tight">Sign in to console</h2>
+            <p className="text-slate-400 text-xs font-medium mt-1">Enter authorized credentials to gain entry token</p>
+          </header>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-4">
             
-            {/* Email Field */}
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold text-gray-500 tracking-widest uppercase">EMAIL</label>
+            {/* Email Form Entry */}
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-bold text-slate-400 tracking-wider uppercase flex items-center gap-2">
+                <Mail size={12} className="text-slate-500" /> Email Identity
+              </label>
               <input 
                 type="email" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-[#1a1a1a] border border-gray-800 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-600 transition-colors"
-                placeholder="raven.k@transitops.in"
+                className="w-full bg-[#090d16] border border-slate-800/80 rounded-xl px-4 py-3 text-white text-xs font-medium focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:focus:ring-indigo-500/40 transition-all placeholder-slate-600"
+                placeholder="operator@transitops.in"
                 required
               />
             </div>
 
-            {/* Password Field */}
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold text-gray-500 tracking-widest uppercase">PASSWORD</label>
+            {/* Password Form Entry */}
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-bold text-slate-400 tracking-wider uppercase flex items-center gap-2">
+                <Lock size={12} className="text-slate-500" /> System Password
+              </label>
               <input 
                 type="password" 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-[#1a1a1a] border border-gray-800 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-600 transition-colors"
+                className="w-full bg-[#090d16] border border-slate-800/80 rounded-xl px-4 py-3 text-white text-xs font-medium focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:focus:ring-indigo-500/40 transition-all placeholder-slate-700"
                 placeholder="••••••••"
                 required
               />
             </div>
 
-            {/* Role Field */}
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold text-gray-500 tracking-widest uppercase">ROLE (RBAC)</label>
-              <select 
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                className="w-full bg-[#1a1a1a] border border-gray-800 rounded-lg px-4 py-3 text-white text-sm appearance-none focus:outline-none focus:border-amber-600 transition-colors"
-              >
-                <option>Fleet Manager</option>
-                <option>Dispatcher</option>
-                <option>Safety Officer</option>
-                <option>Financial Analyst</option>
-              </select>
+            {/* Role Target Select */}
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-bold text-slate-400 tracking-wider uppercase flex items-center gap-2">
+                <Users2 size={12} className="text-slate-500" /> Target Access Scope
+              </label>
+              <div className="relative">
+                <select 
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  className="w-full bg-[#090d16] border border-slate-800/80 rounded-xl px-4 py-3 text-white text-xs font-bold focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all cursor-pointer appearance-none"
+                >
+                  <option>Fleet Manager</option>
+                  <option>Dispatcher</option>
+                  <option>Safety Officer</option>
+                  <option>Financial Analyst</option>
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500">
+                  <Shield size={14} />
+                </div>
+              </div>
             </div>
 
-            {/* Options */}
+            {/* Persistence Controls */}
             <div className="flex items-center justify-between pt-2">
-              <label className="flex items-center space-x-3 cursor-pointer">
-                <div className="w-5 h-5 rounded border border-gray-600 bg-[#1a1a1a] flex items-center justify-center">
-                  <div className="w-3 h-3 bg-green-500 rounded-sm"></div>
+              <label className="flex items-center space-x-2.5 cursor-pointer group">
+                <input type="checkbox" defaultChecked className="sr-only peer" />
+                <div className="w-4 h-4 rounded border border-slate-700 bg-[#090d16] flex items-center justify-center peer-checked:border-indigo-500 peer-checked:bg-indigo-600 transition-all">
+                  <div className="w-1.5 h-1.5 bg-white rounded-sm"></div>
                 </div>
-                <span className="text-gray-300 text-sm font-medium">Remember me</span>
+                <span className="text-slate-400 text-xs font-semibold group-hover:text-slate-300 transition-colors">Keep session active</span>
               </label>
-              <a href="#" className="text-blue-500 hover:text-blue-400 text-sm font-medium transition-colors">
-                Forgot password?
+              <a href="#" className="text-indigo-400 hover:text-indigo-300 text-xs font-bold transition-colors">
+                Recover Access
               </a>
             </div>
 
-            {/* Submit Button */}
+            {/* Action Trigger */}
             <button 
               type="submit" 
               disabled={loading}
-              className="w-full bg-[#b45309] hover:bg-[#92400e] text-white font-medium rounded-lg py-3 mt-4 transition-colors disabled:opacity-50"
+              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl py-3.5 mt-4 shadow-lg shadow-indigo-600/10 transition-all duration-200 hover:scale-[1.01] disabled:opacity-50 disabled:hover:scale-100 cursor-pointer"
             >
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? 'Authorizing Console Token...' : 'Initialize Secure Session'}
             </button>
           </form>
-
-          {/* Scoped Access Info */}
-          <div className="mt-12">
-            <p className="text-gray-500 text-xs mb-3">Access is scoped by role after login:</p>
-            <ul className="space-y-1.5 text-gray-400 text-xs">
-              <li>• Fleet Manager → Fleet, Maintenance</li>
-              <li>• Dispatcher → Dashboard, Trips</li>
-              <li>• Safety Officer → Drivers, Compliance</li>
-              <li>• Financial Analyst → Fuel & Expenses, Analytics</li>
-            </ul>
-          </div>
 
         </div>
       </div>
