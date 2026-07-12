@@ -15,6 +15,10 @@ interface Driver {
 export default function Drivers() {
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newDriver, setNewDriver] = useState({
+    name: '', licenseNo: '', category: 'LMV', licenseExpiry: '', contact: ''
+  });
 
   const API_URL = 'http://localhost:3000/api/drivers';
 
@@ -24,7 +28,10 @@ export default function Drivers() {
 
   const fetchDrivers = async () => {
     try {
-      const response = await fetch(API_URL);
+      const token = localStorage.getItem('token');
+      const response = await fetch(API_URL, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
       if (response.ok) {
         const data = await response.json();
         setDrivers(data);
@@ -50,6 +57,30 @@ export default function Drivers() {
     return expiry < new Date();
   };
 
+  const handleAddDriver = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(newDriver)
+      });
+      if (res.ok) {
+        setShowAddModal(false);
+        fetchDrivers();
+      } else {
+        const data = await res.json();
+        alert('Failed to add driver: ' + (data.error || 'Unknown error'));
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <div className="flex h-full flex-col space-y-6">
       <div className="flex items-center justify-between">
@@ -57,7 +88,10 @@ export default function Drivers() {
           <h2 className="text-2xl font-bold tracking-tight text-gray-900">Driver Profiles</h2>
           <p className="text-sm text-gray-500">Monitor driver certifications, schedules, and safety scores.</p>
         </div>
-        <button className="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none">
+        <button 
+          onClick={() => setShowAddModal(true)}
+          className="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none"
+        >
           <Plus className="mr-2 h-4 w-4" />
           Add Driver
         </button>
@@ -141,6 +175,53 @@ export default function Drivers() {
               </div>
             );
           })}
+        </div>
+      )}
+
+      {showAddModal && (
+        <div className="fixed inset-0 z-10 flex items-center justify-center overflow-y-auto bg-gray-500 bg-opacity-75">
+          <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Add New Driver</h3>
+            <form onSubmit={handleAddDriver} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Name</label>
+                <input type="text" required className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm" 
+                  value={newDriver.name} onChange={e => setNewDriver({...newDriver, name: e.target.value})} />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">License Number</label>
+                <input type="text" required className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                  value={newDriver.licenseNo} onChange={e => setNewDriver({...newDriver, licenseNo: e.target.value})} />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Category</label>
+                <select className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm bg-white"
+                  value={newDriver.category} onChange={e => setNewDriver({...newDriver, category: e.target.value})}>
+                  <option value="LMV">LMV (Light Motor Vehicle)</option>
+                  <option value="HMV">HMV (Heavy Motor Vehicle)</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">License Expiry Date</label>
+                <input type="date" required className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                  value={newDriver.licenseExpiry} onChange={e => setNewDriver({...newDriver, licenseExpiry: e.target.value})} />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Contact Number</label>
+                <input type="text" required className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                  value={newDriver.contact} onChange={e => setNewDriver({...newDriver, contact: e.target.value})} />
+              </div>
+              
+              <div className="mt-5 sm:mt-6 sm:flex sm:flex-row-reverse">
+                <button type="submit" className="inline-flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 sm:ml-3 sm:w-auto sm:text-sm">
+                  Save
+                </button>
+                <button type="button" onClick={() => setShowAddModal(false)} className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 sm:mt-0 sm:w-auto sm:text-sm">
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>

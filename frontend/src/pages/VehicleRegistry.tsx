@@ -14,6 +14,10 @@ interface Vehicle {
 export default function VehicleRegistry() {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newVehicle, setNewVehicle] = useState({
+    registrationNo: '', name: '', type: '', capacityKg: 0, odometerKm: 0, acquisitionCost: 0
+  });
 
   // Note: in a real app, this URL comes from env
   const API_URL = 'http://localhost:3000/api/vehicles';
@@ -24,7 +28,10 @@ export default function VehicleRegistry() {
 
   const fetchVehicles = async () => {
     try {
-      const response = await fetch(API_URL);
+      const token = localStorage.getItem('token');
+      const response = await fetch(API_URL, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
       if (response.ok) {
         const data = await response.json();
         setVehicles(data);
@@ -45,6 +52,59 @@ export default function VehicleRegistry() {
     }
   };
 
+  const handleAddVehicle = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(newVehicle)
+      });
+      if (res.ok) {
+        setShowAddModal(false);
+        fetchVehicles();
+      } else {
+        const data = await res.json();
+        alert('Failed to add vehicle: ' + (data.error || 'Unknown error'));
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_URL}/upload`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: formData
+      });
+      
+      const data = await res.json();
+      if (res.ok) {
+        alert(data.message);
+        fetchVehicles();
+      } else {
+        alert('Upload failed: ' + data.error);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+    // reset input
+    e.target.value = '';
+  };
+
   return (
     <div className="flex h-full flex-col space-y-6">
       <div className="flex items-center justify-between">
@@ -53,11 +113,15 @@ export default function VehicleRegistry() {
           <p className="text-sm text-gray-500">Manage your fleet, view statuses, and import bulk data.</p>
         </div>
         <div className="flex space-x-3">
-          <button className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none">
+          <label className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none cursor-pointer">
             <Upload className="mr-2 h-4 w-4" />
             Import CSV
-          </button>
-          <button className="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none">
+            <input type="file" accept=".csv" className="hidden" onChange={handleFileUpload} />
+          </label>
+          <button 
+            onClick={() => setShowAddModal(true)}
+            className="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none"
+          >
             <Plus className="mr-2 h-4 w-4" />
             Add Vehicle
           </button>
@@ -149,6 +213,57 @@ export default function VehicleRegistry() {
           </tbody>
         </table>
       </div>
+
+      {showAddModal && (
+        <div className="fixed inset-0 z-10 flex items-center justify-center overflow-y-auto bg-gray-500 bg-opacity-75">
+          <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Add New Vehicle</h3>
+            <form onSubmit={handleAddVehicle} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Registration Number</label>
+                <input type="text" required className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm" 
+                  value={newVehicle.registrationNo} onChange={e => setNewVehicle({...newVehicle, registrationNo: e.target.value})} />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Name/Model</label>
+                <input type="text" required className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                  value={newVehicle.name} onChange={e => setNewVehicle({...newVehicle, name: e.target.value})} />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Type</label>
+                <input type="text" required className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                  value={newVehicle.type} onChange={e => setNewVehicle({...newVehicle, type: e.target.value})} />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Capacity (Kg)</label>
+                  <input type="number" required min="0" className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                    value={newVehicle.capacityKg} onChange={e => setNewVehicle({...newVehicle, capacityKg: Number(e.target.value)})} />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Odometer (Km)</label>
+                  <input type="number" required min="0" className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                    value={newVehicle.odometerKm} onChange={e => setNewVehicle({...newVehicle, odometerKm: Number(e.target.value)})} />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Acquisition Cost ($)</label>
+                <input type="number" required min="0" className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                  value={newVehicle.acquisitionCost} onChange={e => setNewVehicle({...newVehicle, acquisitionCost: Number(e.target.value)})} />
+              </div>
+              
+              <div className="mt-5 sm:mt-6 sm:flex sm:flex-row-reverse">
+                <button type="submit" className="inline-flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 sm:ml-3 sm:w-auto sm:text-sm">
+                  Save
+                </button>
+                <button type="button" onClick={() => setShowAddModal(false)} className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 sm:mt-0 sm:w-auto sm:text-sm">
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -17,15 +17,17 @@ import authRouter from './routes/auth';
 import driversRouter from './routes/drivers';
 import maintenanceRouter from './routes/maintenance';
 
+import { authenticateToken } from './routes/auth';
+
 // Basic health check endpoint
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', message: 'TransitOps Backend API is running' });
 });
 
-app.use('/api/vehicles', vehiclesRouter);
 app.use('/api/auth', authRouter);
-app.use('/api/drivers', driversRouter);
-app.use('/api/maintenance', maintenanceRouter);
+app.use('/api/vehicles', authenticateToken, vehiclesRouter);
+app.use('/api/drivers', authenticateToken, driversRouter);
+app.use('/api/maintenance', authenticateToken, maintenanceRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
