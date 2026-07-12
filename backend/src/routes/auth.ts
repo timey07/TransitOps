@@ -51,17 +51,36 @@ router.post('/register', async (req, res) => {
 // POST login
 router.post('/login', async (req, res) => {
   try {
-    const { email, password } = loginSchema.parse(req.body);
+    const { email, password, role } = loginSchema.parse(req.body);
 
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
       return res.status(400).json({ error: 'Invalid credentials' });
     }
 
+    // Check account lockout
+    if (user.lockedUntil && new Date(user.lockedUntil) > new Date()) {
+      return res.status(403).json({ error: 'Account locked after 5 failed attempts. Please try again later.' });
+    }
+
+    // Check role match
+    if (user.role !== role) {
+      await handleFailedLogin(user);
+      return res.status(400).json({ error: 'Invalid role selection' });
+    }
+
+    // Check password
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
+      await handleFailedLogin(user);
       return res.status(400).json({ error: 'Invalid credentials' });
     }
+
+    // Success! Reset failed attempts
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { failedAttempts: 0, lockedUntil: null }
+    });
 
     const token = jwt.sign(
       { userId: user.id, email: user.email, role: user.role },
@@ -85,6 +104,23 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
+
+// Helper function to track failed logins
+async function handleFailedLogin(user: any) {
+  const newAttempts = user.failedAttempts + 1;
+  let lockedUntil = null;
+  
+  if (newAttempts >= 5) {
+    // Lock for 15 minutes
+    lockedUntil = new Date();
+    lockedUntil.setMinutes(lockedUntil.getMinutes() + 15);
+  }
+
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { failedAttempts: newAttempts, lockedUntil }
+  });
+}
 
 // Middleware for auth verification
 export function authenticateToken(req: any, res: any, next: any) {

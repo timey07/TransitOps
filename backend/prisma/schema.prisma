@@ -11,10 +11,12 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
-  email    String @unique
-  password String
-  role     String // FLEET_MANAGER, DISPATCHER, SAFETY_OFFICER, FINANCIAL_ANALYST
+  id             String    @id @default(uuid())
+  email          String    @unique
+  password       String
+  role           String    // FLEET_MANAGER, DISPATCHER, SAFETY_OFFICER, FINANCIAL_ANALYST
+  failedAttempts Int       @default(0)
+  lockedUntil    DateTime?
 }
 
 model Vehicle {
