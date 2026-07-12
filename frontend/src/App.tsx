@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "./components/layout/MainLayout";
+import VehicleRegistry from "./pages/VehicleRegistry";
 
 function App() {
   return (
@@ -7,7 +8,7 @@ function App() {
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<div>Dashboard Page Placeholder</div>} />
-          <Route path="vehicles" element={<div>Vehicle Registry Placeholder</div>} />
+          <Route path="vehicles" element={<VehicleRegistry />} />
           <Route path="drivers" element={<div>Driver Profiles Placeholder</div>} />
           <Route path="trips" element={<div>Trip Dispatcher Placeholder</div>} />
           <Route path="maintenance" element={<div>Maintenance Placeholder</div>} />
